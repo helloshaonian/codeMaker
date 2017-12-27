@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="${meta.mapperInterfacePackageName}.${meta.mapperInterfaceClassName}">
+	
+	
+	<sql id="mapSQL" >
+		#set($temp=0) 
+		#foreach( ${col} in ${meta.cols} )
+		#if( $temp >0 ) , #end  ${col.colName} as "${col.fieldName}" 
+		#set($temp=$temp+1)
+		#end
+  	</sql>
+  	
+	<sql id="objectSQL" >
+		#set($temp=0) 
+		#foreach( ${col} in ${meta.cols} )
+		#if( $temp >0 ) , #end  ${col.colName} as "${col.fieldName}" 
+		#set($temp=$temp+1)
+		#end
+  	</sql>
+	
+	<select id="selectByPrimaryKey" resultType="${meta.domainPackageName}.${meta.domainClassName}" parameterType="java.lang.Long" >
+    	SELECT 
+    	<include refid="mapSQL" />
+    	FROM ${meta.tableName}
+   		 WHERE 
+		#set($temp=0)
+		#foreach( ${col} in ${meta.cols} )
+		#if($col.isPkFlag())
+		#if( $temp >0 ) and #end ${col.colName}=#{${col.fieldName}} 
+		#set($temp=$temp+1)
+		#end
+		#end
+  </select>
+  
+   <select id="selectModelByExample" resultType="${meta.domainPackageName}.${meta.domainClassName}" parameterType="${meta.domainPackageName}.${meta.domainClassName}" >
+    SELECT 
+    <include refid="objectSQL" />
+    FROM ${meta.tableName}
+    <where>
+    	 #foreach( ${col} in ${meta.cols} )<if test="${col.fieldName}!=null">AND  ${col.colName} = #{${col.fieldName}}</if>
+		#end
+    </where>
+  </select>
+  
+  <select id="selectByExample" resultType="java.util.HashMap" parameterType="${meta.domainPackageName}.${meta.domainClassName}" >
+    SELECT 
+    <include refid="mapSQL" />
+    FROM ${meta.tableName}
+    <where>
+    	 #foreach( ${col} in ${meta.cols} )<if test="${col.fieldName}!=null">AND  ${col.colName} = #{${col.fieldName}}</if>
+		#end
+    </where>
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    DELETE FROM ${meta.tableName}
+    WHERE #set($temp=0)
+		#foreach( ${col} in ${meta.cols} )
+		#if($col.isPkFlag())
+		#if( $temp >0 ) and #end ${col.colName}=#{${col.fieldName}} 
+		#set($temp=$temp+1)
+		#end
+		#end
+  </delete>
+  
+  <!--mysql主键自增-->	
+  <insert id="insert" parameterType="${meta.domainPackageName}.${meta.domainClassName}" useGeneratedKeys="true" keyProperty="#foreach( ${col} in ${meta.cols} )#if($col.isPkFlag())#end#if($col.isPkFlag())${col.fieldName}#end#end">
+    INSERT INTO ${meta.tableName}
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+    	#foreach( ${col} in ${meta.cols} )
+    	#if($col.isPkFlag())#end
+    	#if(!$col.isPkFlag())
+    	<if test="${col.fieldName} != null" >${col.colName},</if>
+    	#end
+		#end
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+    	#foreach( ${col} in ${meta.cols} )
+    	#if($col.isPkFlag())#end
+    	#if(!$col.isPkFlag())
+    	<if test="${col.fieldName} != null" >#{${col.fieldName}},</if>
+		#end
+		#end
+    </trim>
+  </insert>
+  
+   <update id="update" parameterType="${meta.domainPackageName}.${meta.domainClassName}" >
+    UPDATE ${meta.tableName}
+    <set >
+    	#foreach( ${col} in ${meta.cols} )
+    	<if test="${col.fieldName} != null" >${col.colName} = #{${col.fieldName}},</if>
+		#end
+    </set>
+    WHERE #set($temp=0)
+		#foreach( ${col} in ${meta.cols} )
+		#if($col.isPkFlag())
+		#if( $temp >0 ) and #end ${col.colName}=#{${col.fieldName}} 
+		#set($temp=$temp+1)
+		#end
+		#end
+  </update>
+  
+  
+	
+	<!--mysql批量插入-->	
+		 <insert id="insertModels"  parameterType="java.util.List">  
+	     insert into ${meta.tableName}
+	     <foreach collection="list" item="item" index="index" > 
+	     <if test="index ==0"> 
+	     <trim prefix="(" suffix=")" suffixOverrides="," >
+	     #foreach( ${col} in ${meta.cols} )
+	     #if($col.isPkFlag())#end
+	     #if(!$col.isPkFlag())
+    	 <if test="item.${col.fieldName} != null" >${col.colName},</if>
+    	 #end
+		 #end
+	     </trim>
+	     </if>
+	     </foreach>
+	     values
+	     <foreach collection="list" item="item" index="index" separator="," >  
+	     <trim prefix="(" suffix=")" suffixOverrides="," >
+	      #foreach( ${col} in ${meta.cols} )
+	      #if($col.isPkFlag())#end
+	      #if(!$col.isPkFlag())
+    			<if test="item.${col.fieldName} != null" >#{item.${col.fieldName}},</if>
+    	  #end
+		  #end
+	     </trim>								    										
+	     </foreach>				
+	</insert>
+	
+	
+	<!---->
+	<update id="updateModels" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="begin"
+			close=";end;" separator=";">
+			UPDATE ${meta.tableName}
+		    <set >
+		    	#foreach( ${col} in ${meta.cols} )
+		    	<if test="${col.fieldName} != null" >${col.colName} = #{${col.fieldName}},</if>
+				#end
+		    </set>
+		    WHERE #set($temp=0)
+				#foreach( ${col} in ${meta.cols} )
+				#if($col.isPkFlag())
+				#if( $temp >0 ) and #end ${col.colName}=#{${col.fieldName}} 
+				#set($temp=$temp+1)
+				#end
+				#end
+		</foreach>
+	</update>
+	
+	
+</mapper>

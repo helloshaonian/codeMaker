@@ -1,0 +1,93 @@
+package ${meta.mapperInterfacePackageName};
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+
+import ${meta.domainPackageName}.${meta.domainClassName};
+
+/**
+ * @description ${meta.tableDesc} --dao层接口
+ * @author ${meta.user}
+ * @Date:${meta.date}
+ */
+@Repository
+public interface ${meta.mapperInterfaceClassName} {
+
+	/**
+	 * @Description:根据主键查询
+	 * @param id 主键
+	 * @return 实体
+	 * @author:${meta.user}
+	 * @Date:${meta.date}
+	 */	
+	${meta.domainClassName} selectByPrimaryKey(Long id);
+	
+	/**
+	 * @Description:根据例子查询
+	 * @param vo 查询对象
+	 * @return map集合
+	 * @author:${meta.user}
+	 * @Date:${meta.date}
+	 */	
+	List<HashMap<String, Object>> selectByExample(${meta.domainClassName} vo);
+	
+	/**
+	 * @Description:根据例子查询
+	 * @param vo 查询对象
+	 * @return 实体集合
+	 * @author:${meta.user}
+	 * @Date:${meta.date}
+	 */	
+	List<${meta.domainClassName}> selectModelByExample(${meta.domainClassName} vo);
+	
+	/**
+	 * @Description:插入一条记录
+	 * @param record 插入对象（必须有主键）
+	 * @return 受影响的条数
+	 * @author:${meta.user}
+	 * @Date:${meta.date}
+	 */	
+    int insert(${meta.domainClassName} record);
+    
+  	/**
+	 * @Description:插入多条记录
+	 * @param list 插入对象（必须有主键）
+	 * @return 受影响的条数
+	 * @author:${meta.user}
+	 * @Date:${meta.date}
+	 */	
+    int insertModels(List list);
+    
+    
+   /**
+	 * @Description:更新一条记录
+	 * @param record 更新对象（必须有主键）
+	 * @return 受影响的条数
+	 * @author:${meta.user}
+	 * @Date:${meta.date}
+	 */	
+    int update(${meta.domainClassName} record);
+    
+    /**
+	 * @Description:更新多条记录
+	 * @param list 更新对象（必须有主键）
+	 * @return 受影响的条数
+	 * @author:${meta.user}
+	 * @Date:${meta.date}
+	 */	
+    int update(List list);
+    
+    
+   	/**
+	 * @Description:删除一条记录
+	 * @param id 删除的记录的主键
+	 * @return 受影响的条数
+	 * @author:${meta.user}
+	 * @Date:${meta.date}
+	 */	
+    int deleteByPrimaryKey(Long id);
+ }

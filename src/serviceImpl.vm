@@ -1,0 +1,65 @@
+package ${meta.servicePackageName}.impl;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import ${meta.servicePackageName}.${meta.serviceClassName};
+import ${meta.domainPackageName}.${meta.domainClassName};
+import ${meta.mapperInterfacePackageName}.${meta.mapperInterfaceClassName};
+
+
+/**
+ *@Description：${meta.tableDesc} Servcie实现类
+ *@Author：wangyanfei
+ */
+@Service
+@Transactional
+public class ${meta.serviceClassName}Impl implements ${meta.serviceClassName}{
+
+	@Autowired
+	private ${meta.mapperInterfaceClassName} ${meta.mapperInterfaceClassName};//${meta.tableDesc}
+	
+	
+	@Override
+	public List<HashMap<String, Object>> selectByExample(${meta.domainClassName} vo) {
+		return ${meta.mapperInterfaceClassName}.selectByExample(vo);
+	}
+
+	@Override
+	public List<${meta.domainClassName}> selectModelByExample(${meta.domainClassName} vo) {
+		return ${meta.mapperInterfaceClassName}.selectModelByExample(vo);
+	}
+	
+	
+	@Override
+	public ${meta.domainClassName} selectByPrimaryKey(Long id) {
+		return ${meta.mapperInterfaceClassName}.selectByPrimaryKey(id);
+	}
+
+	@Override
+	public int updateByPrimaryKey(${meta.domainClassName} vo)  {
+		return ${meta.mapperInterfaceClassName}.update(vo);
+	}
+
+	@Override
+	public int insert(${meta.domainClassName} vo) {
+		return ${meta.mapperInterfaceClassName}.insert(vo);
+	}
+	
+	@Override
+	public void insertModels(List<${meta.domainClassName}> list){
+			${meta.mapperInterfaceClassName}.insertModels(list);
+	}
+	
+	
+	@Override
+	public int deleteByPrimaryKey(Long id){
+		return  ${meta.mapperInterfaceClassName}.deleteByPrimaryKey(id);
+	}
+	
+}

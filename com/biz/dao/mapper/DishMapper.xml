@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.biz.dao.DishMapper">
+	
+	
+	<sql id="mapSQL" >
+						  id as "id" 
+						 ,   pre_school_id as "preSchoolId" 
+						 ,   code as "code" 
+						 ,   name as "name" 
+						 ,   short_name as "shortName" 
+						 ,   use_type as "useType" 
+				  	</sql>
+  	
+	<sql id="objectSQL" >
+						  id as "id" 
+						 ,   pre_school_id as "preSchoolId" 
+						 ,   code as "code" 
+						 ,   name as "name" 
+						 ,   short_name as "shortName" 
+						 ,   use_type as "useType" 
+				  	</sql>
+	
+	<select id="selectByPrimaryKey" resultType="com.biz.domain.Dish" parameterType="java.lang.Long" >
+    	SELECT 
+    	<include refid="mapSQL" />
+    	FROM dish
+   		 WHERE 
+								 id=#{id} 
+																										  </select>
+  
+   <select id="selectModelByExample" resultType="com.biz.domain.Dish" parameterType="com.biz.domain.Dish" >
+    SELECT 
+    <include refid="objectSQL" />
+    FROM dish
+    <where>
+    	 <if test="id!=null">AND  id = #{id}</if>
+		<if test="preSchoolId!=null">AND  pre_school_id = #{preSchoolId}</if>
+		<if test="code!=null">AND  code = #{code}</if>
+		<if test="name!=null">AND  name = #{name}</if>
+		<if test="shortName!=null">AND  short_name = #{shortName}</if>
+		<if test="useType!=null">AND  use_type = #{useType}</if>
+		    </where>
+  </select>
+  
+  <select id="selectByExample" resultType="java.util.HashMap" parameterType="com.biz.domain.Dish" >
+    SELECT 
+    <include refid="mapSQL" />
+    FROM dish
+    <where>
+    	 <if test="id!=null">AND  id = #{id}</if>
+		<if test="preSchoolId!=null">AND  pre_school_id = #{preSchoolId}</if>
+		<if test="code!=null">AND  code = #{code}</if>
+		<if test="name!=null">AND  name = #{name}</if>
+		<if test="shortName!=null">AND  short_name = #{shortName}</if>
+		<if test="useType!=null">AND  use_type = #{useType}</if>
+		    </where>
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    DELETE FROM dish
+    WHERE 						 id=#{id} 
+																										  </delete>
+  
+  
+  <insert id="insert" parameterType="com.biz.domain.Dish" >
+    INSERT INTO dish
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+    	
+    	    	<if test="id != null" >id,</if>
+		    	<if test="preSchoolId != null" >pre_school_id,</if>
+		    	<if test="code != null" >code,</if>
+		    	<if test="name != null" >name,</if>
+		    	<if test="shortName != null" >short_name,</if>
+		    	<if test="useType != null" >use_type,</if>
+		    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+    	    	<if test="id != null" >#{id},</if>
+		    	<if test="preSchoolId != null" >#{preSchoolId},</if>
+		    	<if test="code != null" >#{code},</if>
+		    	<if test="name != null" >#{name},</if>
+		    	<if test="shortName != null" >#{shortName},</if>
+		    	<if test="useType != null" >#{useType},</if>
+		    </trim>
+  </insert>
+  
+   <update id="update" parameterType="com.biz.domain.Dish" >
+    UPDATE dish
+    <set >
+    	    	<if test="id != null" >id = #{id},</if>
+		    	<if test="preSchoolId != null" >pre_school_id = #{preSchoolId},</if>
+		    	<if test="code != null" >code = #{code},</if>
+		    	<if test="name != null" >name = #{name},</if>
+		    	<if test="shortName != null" >short_name = #{shortName},</if>
+		    	<if test="useType != null" >use_type = #{useType},</if>
+		    </set>
+    WHERE 						 id=#{id} 
+																										  </update>
+  
+  
+  <delete id="deleteByIds" parameterType="java.math.BigDecimal">
+		DELETE FROM dish t WHERE 
+								 id 
+																												 in
+  		<foreach collection="list" item="item" index="index"
+            open="(" close=")" separator=",">
+            #{item}
+         </foreach>
+	</delete>
+	
+	<!--生成器生成代码，需要自己手动修改java属性名-->
+	<insert id="insertModels" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="begin"
+			close=";end;" separator=";">
+			INSERT INTO dish
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				    			<if test="id != null" >id,</if>
+				    			<if test="preSchoolId != null" >pre_school_id,</if>
+				    			<if test="code != null" >code,</if>
+				    			<if test="name != null" >name,</if>
+				    			<if test="shortName != null" >short_name,</if>
+				    			<if test="useType != null" >use_type,</if>
+							</trim>
+			<trim prefix="values (" suffix=")" suffixOverrides=",">
+				    			<if test="id != null" >#{id},</if>
+				    			<if test="preSchoolId != null" >#{preSchoolId},</if>
+				    			<if test="code != null" >#{code},</if>
+				    			<if test="name != null" >#{name},</if>
+				    			<if test="shortName != null" >#{shortName},</if>
+				    			<if test="useType != null" >#{useType},</if>
+							</trim>
+		</foreach>
+	</insert>
+
+	<!--生成器生成代码，需要自己手动修改java属性名-->
+	<update id="updateModels" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="begin"
+			close=";end;" separator=";">
+			UPDATE dish
+		    <set >
+		    			    	<if test="id != null" >id = #{id},</if>
+						    	<if test="preSchoolId != null" >pre_school_id = #{preSchoolId},</if>
+						    	<if test="code != null" >code = #{code},</if>
+						    	<if test="name != null" >name = #{name},</if>
+						    	<if test="shortName != null" >short_name = #{shortName},</if>
+						    	<if test="useType != null" >use_type = #{useType},</if>
+						    </set>
+		    WHERE 												 id=#{id} 
+																																																						</foreach>
+	</update>
+	
+	
+</mapper>
